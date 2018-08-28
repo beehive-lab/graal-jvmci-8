@@ -22,7 +22,17 @@
  */
 package jdk.vm.ci.hotspot;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+import jdk.vm.ci.common.JVMCIError;
 import static jdk.vm.ci.hotspot.CompilerToVM.compilerToVM;
+import jdk.vm.ci.hotspot.HotSpotJVMCIRuntime.Option;
 import static jdk.vm.ci.hotspot.HotSpotJVMCIRuntime.runtime;
 import static jdk.vm.ci.hotspot.HotSpotModifiers.BRIDGE;
 import static jdk.vm.ci.hotspot.HotSpotModifiers.SYNTHETIC;
@@ -50,6 +60,7 @@ import jdk.vm.ci.meta.JavaMethod;
 import jdk.vm.ci.meta.JavaType;
 import jdk.vm.ci.meta.LineNumberTable;
 import jdk.vm.ci.meta.Local;
+import jdk.vm.ci.meta.LocalAnnotation;
 import jdk.vm.ci.meta.LocalVariableTable;
 import jdk.vm.ci.meta.ProfilingInfo;
 import jdk.vm.ci.meta.ResolvedJavaMethod;
@@ -521,20 +532,37 @@ final class HotSpotResolvedJavaMethodImpl extends HotSpotMethod implements HotSp
         Executable javaMethod = toJava();
         return javaMethod == null ? null : javaMethod.getAnnotation(annotationClass);
     }
+    
+    public LocalAnnotation[] getLocalAnnotations() {
+        Executable ex = toJava();
+
+        try {
+            final Method m = Executable.class.getDeclaredMethod("getTypeAnnotationBytes");
+            m.setAccessible(true);
+            final byte[] bytes = (byte[]) m.invoke(ex);
+            if(bytes == null){
+                return new LocalAnnotation[0];
+            }
+            return TypeAnnotationParser.parseTypeAnnotations(bytes, getConstantPool(), ex.getDeclaringClass());
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+
+        }
+        return new LocalAnnotation[0];
+    }
 
     public boolean isBridge() {
         return (BRIDGE & getModifiers()) != 0;
     }
-
+    
     @Override
     public boolean isSynthetic() {
         return (SYNTHETIC & getModifiers()) != 0;
     }
-
+    
     public boolean isVarArgs() {
         return (VARARGS & getModifiers()) != 0;
     }
-
+    
     public boolean isDefault() {
         // Copied from java.lang.Method.isDefault()
         int mask = Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC;

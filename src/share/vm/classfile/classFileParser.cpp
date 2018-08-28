@@ -2273,6 +2273,20 @@ methodHandle ClassFileParser::parse_method(bool is_interface,
           stackmap_data = parse_stackmap_table(code_attribute_length, CHECK_(nullHandle));
           stackmap_data_length = code_attribute_length;
           parsed_stackmap_attribute = true;
+         } else if (_cp->symbol_at(code_attribute_name_index) == vmSymbols::tag_runtime_visible_type_annotations()) {
+          if (runtime_visible_type_annotations != NULL) {
+            classfile_parse_error(
+              "Multiple RuntimeVisibleTypeAnnotations attributes for method in class file %s",
+              CHECK_(nullHandle));
+          }
+          runtime_visible_type_annotations_length = code_attribute_length;
+          runtime_visible_type_annotations = cfs->get_u1_buffer();
+          assert(runtime_visible_type_annotations != NULL, "null visible type annotations");
+          //parse_annotations(runtime_visible_type_annotations,
+           //   runtime_visible_type_annotations_length, &parsed_annotations,
+            //         CHECK_(nullHandle));
+          // No need for the VM to parse Type annotations
+          cfs->skip_u1(code_attribute_length, CHECK_(nullHandle));
         } else {
           // Skip unknown attributes
           cfs->skip_u1(code_attribute_length, CHECK_(nullHandle));

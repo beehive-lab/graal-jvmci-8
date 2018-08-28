@@ -83,7 +83,7 @@ public class TargetDescription {
         this.implicitNullCheckLimit = implicitNullCheckLimit;
         this.inlineObjects = inlineObjects;
 
-        assert arch.getPlatformKind(wordJavaKind).equals(arch.getWordKind());
+        //assert arch.getPlatformKind(wordJavaKind).equals(arch.getWordKind());
     }
 
     @Override

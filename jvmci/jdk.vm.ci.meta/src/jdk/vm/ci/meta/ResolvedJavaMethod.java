@@ -333,6 +333,12 @@ public interface ResolvedJavaMethod extends JavaMethod, InvokeTarget, ModifiersP
     Annotation[][] getParameterAnnotations();
 
     /**
+     * Returns an array of annotations used on local variables in this method
+     * 
+     * @return An array of LocalAnnotations, empty array if no annotations exist. 
+     */
+    LocalAnnotation[] getLocalAnnotations();
+    /**
      * Returns an array of {@link Type} objects that represent the formal parameter types, in
      * declaration order, of this method.
      *
