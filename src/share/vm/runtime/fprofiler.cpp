@@ -635,7 +635,12 @@ class vmNode : public ProfilerNode {
   const char *name()    const { return _name; }
   bool is_compiled()    const { return true; }
 
-  bool vm_match(const char* name) const { return strcmp(name, _name) == 0; }
+  bool vm_match(const char* name) const {
+    if (name == NULL) {
+      return name == _name;
+    }
+    return strcmp(name, _name) == 0;
+  }
 
   Method* method()          { return NULL; }
 
