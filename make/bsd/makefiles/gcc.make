@@ -337,11 +337,12 @@ else
   endif
 endif
 
-# We want to use libc++ on Clang 5.0
+# We want to use libc++ on Clang 5.0 and > 10
 ifeq ($(USE_CLANG), true)
   # Clang 5.0
-  ifeq ($(shell expr $(CC_VER_MAJOR) = 5 \& \( $(CC_VER_MINOR) = 0 \| $(CC_VER_MINOR) = 1 \) ), 1)
+  ifeq ($(shell expr \( $(CC_VER_MAJOR) = 10 \| $(CC_VER_MAJOR) = 5 \) \& \( $(CC_VER_MINOR) = 0 \| $(CC_VER_MINOR) = 1 \) ), 1)
     CFLAGS += -stdlib=libc++
+    LFLAGS += -stdlib=libc++
   endif
 endif
 
@@ -387,7 +388,7 @@ STATIC_STDCXX = -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic
 
 # Ensure use libstdc++ on clang, not libc++
 ifeq ($(USE_CLANG), true)
-  LFLAGS += -stdlib=libstdc++
+  LFLAGS += -stdlib=libc++
 endif
 
 ifeq ($(USE_CLANG),)
