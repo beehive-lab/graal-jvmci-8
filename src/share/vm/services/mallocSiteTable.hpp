@@ -39,7 +39,7 @@
 class MallocSite : public AllocationSite<MemoryCounter> {
  public:
   MallocSite() :
-    AllocationSite<MemoryCounter>(NativeCallStack::EMPTY_STACK) { }
+    AllocationSite<MemoryCounter>(NativeCallStack::empty_stack()) { }
 
   MallocSite(const NativeCallStack& stack) :
     AllocationSite<MemoryCounter>(stack) { }

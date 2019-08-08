@@ -51,18 +51,23 @@
  * 2. The class is strict stack object, no heap or virtual memory can be allocated
  *    from it.
  */
+class MemTracker;
+
 class NativeCallStack : public StackObj {
- public:
-  static const NativeCallStack EMPTY_STACK;
+ friend class MemTracker;
 
  private:
   address   _stack[NMT_TrackingStackDepth];
-  int       _hash_value;
+  unsigned int       _hash_value;
 
+  static NativeCallStack EMPTY_STACK;
  public:
   NativeCallStack(int toSkip = 0, bool fillStack = false);
   NativeCallStack(address* pc, int frameCount);
 
+  static inline const NativeCallStack& empty_stack() {
+    return EMPTY_STACK;
+  }
 
   // if it is an empty stack
   inline bool is_empty() const {

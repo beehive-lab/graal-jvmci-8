@@ -67,9 +67,9 @@ NMT_TrackingLevel MemTracker::init_tracking_level() {
     os::unsetenv(buf);
   }
 
-  // Construct NativeCallStack::EMPTY_STACK. It may get constructed twice,
+  // Construct NativeCallStack::empty_stack(). It may get constructed twice,
   // but it is benign, the results are the same.
-  ::new ((void*)&NativeCallStack::EMPTY_STACK) NativeCallStack(0, false);
+  ::new ((void*)&NativeCallStack::empty_stack()) NativeCallStack(0, false);
 
   if (!MallocTracker::initialize(level) ||
       !VirtualMemoryTracker::initialize(level)) {
