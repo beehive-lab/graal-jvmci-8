@@ -14,6 +14,5 @@ cd graal-jvmci-8
 mx build
 ```
 
-You need to use the same JDK the [GitHub](https://github.com/graalvm/openjdk8-jvmci-builder/releases) downloads are based on as the argument to `--java-home` in the above commands.
 The build step above should work on all [supported JDK 8 build platforms](https://wiki.openjdk.java.net/display/Build/Supported+Build+Platforms).
 It should also work on other platforms (such as Oracle Linux, CentOS and Fedora as described [here](http://mail.openjdk.java.net/pipermail/graal-dev/2015-December/004050.html)).
