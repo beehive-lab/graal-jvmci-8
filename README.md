@@ -4,7 +4,7 @@ This is a fork of https://github.com/graalvm/graal-jvmci-8.
 
 ## Building JVMCI JDK 8
 
-To create a JVMCI-enabled JDK 8, make sure you have the forked version of [`mx`](https://github.com/beehive-lab/mx/tree/tornado) on your system and that you are checked out on the `tornado` branch.
+To create a JVMCI-enabled JDK 8, make sure you have the forked version of [`mx`](https://github.com/beehive-lab/mx/tree/tornado) on your system.
 Also point the `JAVA_HOME` env variable to a valid installation of a JDK 8.
 Then run the following commands:
 
